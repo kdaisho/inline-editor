@@ -9,8 +9,8 @@
 		title: null,
 		p1: null,
 		p2: null,
-		tab1: null,
-		tab2: null,
+		tag1: null,
+		tag2: null,
 	};
 
 	$: {
@@ -20,10 +20,21 @@
 			});
 		}
 	}
+
+	let tags = [
+		{
+			lead: "Always something",
+			text: "5 years of noise",
+		},
+	];
+
+	const addTag = () => {
+		tags = [...tags, { lead: "New tag", text: "New subtitle" }];
+	};
 </script>
 
 <div class="control">
-	<button on:click={toggleEditable}>
+	<button class="is-btn" on:click={toggleEditable}>
 		{#if editable}
 			Save
 		{:else}
@@ -31,8 +42,9 @@
 		{/if}
 	</button>
 </div>
-<section class:edit={editable}>
-	<h1 contenteditable={editable} bind:this={data.title}>Inline Editor</h1>
+
+<section class:is-editing={editable}>
+	<h1>Product Name</h1>
 
 	<p contenteditable={editable} bind:this={data.p1}>
 		Is he staying arrival address earnest. To preference considered it
@@ -47,22 +59,62 @@
 		why ham.
 	</p>
 
-	<div class="tabs" contenteditable={editable}>
-		<span class="tab" bind:this={data.tab1}>
-			<h3>Always parish</h3>
-			<p class="small">5 years of noise</p>
-		</span>
+	<div class="group" class:is-editable={editable}>
+		<div class="tags" contenteditable={editable}>
+			{#each tags as tag}
+				<span class="tag">
+					<h3>{tag.lead}</h3>
+					<p class="small">{tag.text}</p>
+				</span>
+			{/each}
+		</div>
 
-		<span class="tab" bind:this={data.tab2}>
-			<h3>Something parish</h3>
-			<p class="small">10 years of some</p>
-		</span>
+		{#if editable}
+			<button class="is-add" on:click={addTag}>+</button>
+		{/if}
 	</div>
 </section>
 
 <style>
-	.edit :is(h1, h3, p) {
-		color: salmon;
+	/* .edit :is(h1, h3, p) {
+    } */
+
+	/* .is-editable {
+		border-radius: var(--radius);
+		display: flex;
+		flex-flow: column nowrap;
+		gap: 1rem;
+		padding: 0.25rem;
+	} */
+
+	.control {
+		position: fixed;
+		top: 20px;
+		right: 200px;
+		z-index: 1;
+	}
+
+	.group {
+		display: inline;
+		width: auto;
+	}
+
+	button.is-btn {
+		border-radius: var(--radius);
+		color: #fff;
+		padding: 0.75rem 1.5rem;
+	}
+
+	button.is-add {
+		align-items: center;
+		background: var(--theme);
+		border-radius: 35px;
+		color: #fff;
+		display: flex;
+		font-size: 1rem;
+		justify-content: center;
+		height: 30px;
+		width: 30px;
 	}
 
 	section {
@@ -85,16 +137,30 @@
 		font-size: 1rem;
 	}
 
-	.tabs {
-		display: flex;
+	[contenteditable] {
+		outline: none;
+	}
+
+	.is-editing [contenteditable] {
+		outline: 1px solid var(--theme);
+		outline-offset: 0.25rem;
+		border-radius: var(--radius-small);
+	}
+
+	.is-editing [contenteditable]:focus {
+		outline: 2px solid var(--theme);
+	}
+
+	.tags {
+		display: inline-flex;
 		flex-flow: row wrap;
 		gap: 1rem;
 	}
 
-	.tab {
+	.tag {
 		align-items: center;
 		background: rgba(0, 0, 0, 0.75);
-		border-radius: 8px;
+		border-radius: var(--radius);
 		display: flex;
 		flex-flow: column nowrap;
 		gap: 0.25rem;
@@ -107,7 +173,7 @@
 		text-overflow: ellipsis;
 	}
 
-	.tab * {
+	.tag * {
 		color: #fff;
 	}
 </style>

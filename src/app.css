@@ -1,3 +1,9 @@
+:root {
+	--theme: #03a9f4;
+	--radius: 8px;
+	--radius-small: 4px;
+}
+
 body * {
 	color: #444;
 	font-family: Helvetica, sans-serif;
@@ -23,12 +29,9 @@ span {
 }
 
 button {
-	background: salmon;
+	background: var(--theme);
 	border: none;
-	border-radius: 8px;
-	color: #fff;
 	font-size: 1.25rem;
-	padding: 0.75rem 1.5rem;
 }
 
 button:hover {
